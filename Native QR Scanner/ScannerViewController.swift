@@ -14,7 +14,14 @@ import Vision
 class ScannerViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+ 
     weak var focusFrameView: FocusFrameView!
+    
+    @IBOutlet var instructionLabel: UILabel!
+    
+    
+    var qrCodeDetected = false
+    var qrCodeValue: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +30,7 @@ class ScannerViewController: UIViewController, ARSCNViewDelegate {
         sceneView.delegate = self
         
         // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
+        sceneView.showsStatistics = false
         
         // Create a new scene
 //        let scene = SCNScene(named: "art.scnassets/ship.scn")!
@@ -32,6 +39,8 @@ class ScannerViewController: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
+        sceneView.autoenablesDefaultLighting = true
+
         addFocusFrame()
         
     }
@@ -41,7 +50,8 @@ class ScannerViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
-        configuration.worldAlignment = .camera
+        
+        configuration.planeDetection = [.horizontal]
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -54,17 +64,8 @@ class ScannerViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
 
-    // MARK: - ARSCNViewDelegate
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
-    func addFocusFrame(){
+    func addFocusFrame() {
 
         let focusFrameView = FocusFrameView(frame: view.bounds)
         view.addSubview(focusFrameView)
@@ -74,6 +75,37 @@ class ScannerViewController: UIViewController, ARSCNViewDelegate {
     }
 
     
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else {
+            return
+        }
+        
+        if qrCodeDetected {
+            let floor = createFloor(planeAnchor: planeAnchor)
+            node.addChildNode(floor)
+            if qrCodeValue == "sphere" {
+                let sphere = createSphere()
+                floor.addChildNode(sphere)
+            } else if qrCodeValue == "cube" {
+                let cube = createCube()
+                floor.addChildNode(cube)
+            } else {
+                print("Nothing")
+            }
+            qrCodeDetected = false
+        }
+    }
+    
+    
+    func createFloor(planeAnchor: ARPlaneAnchor) -> SCNNode {
+        let node = SCNNode()
+        
+        let geometry = SCNPlane(width: 0.1, height: 0.1)
+        node.geometry = geometry
+        node.eulerAngles.x = -Float.pi / 2
+        
+        return node
+    }
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
@@ -89,14 +121,31 @@ class ScannerViewController: UIViewController, ARSCNViewDelegate {
         // Reset tracking and/or remove existing anchors if consistent tracking is required
         
     }
+    
+    func createCube() -> SCNNode {
+        let box = SCNBox(width: 0.2, height: 0.2, length: 0.2, chamferRadius: 0.0)
+        box.firstMaterial?.diffuse.contents = UIColor.green
+        let node = SCNNode(geometry: box)
+        return node
+    }
+
+    func createSphere() -> SCNNode {
+        let sphere = SCNSphere(radius: 0.2)
+        sphere.firstMaterial?.diffuse.contents = UIColor.blue
+        let node = SCNNode(geometry: sphere)
+        return node
+    }
 }
+
+
+
 
 extension ScannerViewController {
   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
-    
+
     guard let currentFrame = sceneView.session.currentFrame else { return }
-    
+
     DispatchQueue.global(qos: .background).async {
       do {
         let request = VNDetectBarcodesRequest { (request, error) in
@@ -105,36 +154,25 @@ extension ScannerViewController {
             print ("[Vision] VNRequest produced no result")
             return
           }
+            self.qrCodeDetected = true
+            self.qrCodeValue = result.payloadStringValue ?? "Nothing"
 
-            print(result.payloadStringValue)
+            print(self.qrCodeValue ?? "nothing")
 
-          let coordinates: [matrix_float4x4] = [result.topLeft, result.topRight, result.bottomRight, result.bottomLeft].compactMap {
-            guard let hitFeature = currentFrame.hitTest($0, types: .featurePoint).first else { return nil }
-            return hitFeature.worldTransform
-          }
-          
-          guard coordinates.count == 4 else { return }
-          
           DispatchQueue.main.async {
-            
-            for coordinate in coordinates {
-              let box = SCNBox(width: 0.01, height: 0.01, length: 0.001, chamferRadius: 0.0)
-              let node = SCNNode(geometry: box)
-              node.transform = SCNMatrix4(coordinate)
-              self.sceneView.scene.rootNode.addChildNode(node)
+            self.instructionLabel.text = "A \(result.payloadStringValue ?? "new object") detected, find a floor to place it"
+            self.instructionLabel.isHighlighted.toggle()
+
             }
-            
-          }
         }
-        
+
         let handler = VNImageRequestHandler(cvPixelBuffer: currentFrame.capturedImage)
         try handler.perform([request])
       } catch(let error) {
-        print("An error occurred during rectangle detection: \(error)")
+        print("An error occurred during qr code detection: \(error)")
       }
     }
   }
 }
-//}
-//}
+
     
