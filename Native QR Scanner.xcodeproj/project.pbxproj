@@ -9,21 +9,23 @@
 /* Begin PBXBuildFile section */
 		6638BC8324924A290084DFA9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6638BC8224924A290084DFA9 /* AppDelegate.swift */; };
 		6638BC8524924A290084DFA9 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 6638BC8424924A290084DFA9 /* art.scnassets */; };
-		6638BC8724924A290084DFA9 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6638BC8624924A290084DFA9 /* ViewController.swift */; };
+		6638BC8724924A290084DFA9 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6638BC8624924A290084DFA9 /* ScannerViewController.swift */; };
 		6638BC8A24924A2A0084DFA9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6638BC8824924A2A0084DFA9 /* Main.storyboard */; };
 		6638BC8C24924A2E0084DFA9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6638BC8B24924A2E0084DFA9 /* Assets.xcassets */; };
 		6638BC8F24924A2E0084DFA9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6638BC8D24924A2E0084DFA9 /* LaunchScreen.storyboard */; };
+		6657F90A24924CA3000A9D0A /* FocusFrameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6657F90924924CA3000A9D0A /* FocusFrameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		6638BC7F24924A290084DFA9 /* Native QR Scanner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Native QR Scanner.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6638BC8224924A290084DFA9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6638BC8424924A290084DFA9 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
-		6638BC8624924A290084DFA9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6638BC8624924A290084DFA9 /* ScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		6638BC8924924A2A0084DFA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6638BC8B24924A2E0084DFA9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6638BC8E24924A2E0084DFA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6638BC9024924A2E0084DFA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6657F90924924CA3000A9D0A /* FocusFrameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusFrameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,11 +60,12 @@
 			children = (
 				6638BC8224924A290084DFA9 /* AppDelegate.swift */,
 				6638BC8424924A290084DFA9 /* art.scnassets */,
-				6638BC8624924A290084DFA9 /* ViewController.swift */,
+				6638BC8624924A290084DFA9 /* ScannerViewController.swift */,
 				6638BC8824924A2A0084DFA9 /* Main.storyboard */,
 				6638BC8B24924A2E0084DFA9 /* Assets.xcassets */,
 				6638BC8D24924A2E0084DFA9 /* LaunchScreen.storyboard */,
 				6638BC9024924A2E0084DFA9 /* Info.plist */,
+				6657F90924924CA3000A9D0A /* FocusFrameView.swift */,
 			);
 			path = "Native QR Scanner";
 			sourceTree = "<group>";
@@ -139,8 +142,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6638BC8724924A290084DFA9 /* ViewController.swift in Sources */,
+				6638BC8724924A290084DFA9 /* ScannerViewController.swift in Sources */,
 				6638BC8324924A290084DFA9 /* AppDelegate.swift in Sources */,
+				6657F90A24924CA3000A9D0A /* FocusFrameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
